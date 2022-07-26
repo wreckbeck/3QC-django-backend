@@ -8,6 +8,7 @@ class Survey(models.Model):
     created_on = models.DateField(auto_now_add=True)
     updated_on = models.DateField(auto_now=True)
 
+
 class Question(models.Model):
     survey = models.ForeignKey(Survey, on_delete=models.CASCADE)
     question_text = models.TextField(default='')
