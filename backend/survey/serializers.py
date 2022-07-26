@@ -5,10 +5,10 @@ class SurveySerializer(serializers.ModelSerializer):
  
     class Meta:
         model = Survey
-        fields = ('id',
+        fields = ['id',
                   'name',
                   'created_on',
-                  'updated_on')
+                  'updated_on']
 
 class AnswerSerializer(serializers.ModelSerializer):
  

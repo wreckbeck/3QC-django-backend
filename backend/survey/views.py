@@ -11,7 +11,7 @@ from rest_framework.decorators import api_view
 @api_view(['GET', 'POST'])
 def survey_data(request):
     if request.method == 'GET':
-        survey = Survey.objects.all()
+        survey = Survey.objects.get_queryset()
         survey_serializer = SurveySerializer(survey)
         return JsonResponse(survey_serializer.data, safe=False, status=status.HTTP_200_OK) # 'the safe boolean parameter defaults to True. If it’s set to False, any object can be passed for serialization (otherwise only dict instances are allowed)'
     elif request.method == 'POST':
