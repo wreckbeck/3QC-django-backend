@@ -1,8 +1,9 @@
+
 from rest_framework import serializers 
 from survey.models import Survey, Answer, Question, UserAnswer
 
 class SurveySerializer(serializers.ModelSerializer):
- 
+
     class Meta:
         model = Survey
         fields = ['id',
@@ -19,7 +20,7 @@ class AnswerSerializer(serializers.ModelSerializer):
                   'answer_text')
 
 class QuestionSerializer(serializers.ModelSerializer):
- 
+    survey = serializers.ReadOnlyField(source='survey.name')
     class Meta:
         model = Question
         fields = ('id',

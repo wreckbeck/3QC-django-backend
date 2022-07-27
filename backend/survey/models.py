@@ -10,11 +10,11 @@ class Survey(models.Model):
 
 
 class Question(models.Model):
-    survey = models.ForeignKey(Survey, on_delete=models.CASCADE)
+    survey = models.ForeignKey(Survey, on_delete=models.CASCADE, related_name='questions')
     question_text = models.TextField(default='')
 
 class Answer(models.Model):
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='answers')
     answer_text = models.TextField(default='')
 
 class UserAnswer(models.Model):
