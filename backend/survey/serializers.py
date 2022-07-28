@@ -11,20 +11,19 @@ class AnswerSerializer(serializers.ModelSerializer):
                   'answer']
 
 class QuestionSerializer(serializers.ModelSerializer):
-    answers = AnswerSerializer(many=True)
+    # answers = AnswerSerializer(many=True)
     
     class Meta:
         model = Question
         fields = ['id',
-                  'question',
-                  'answers']
+                  'question']
     
-    def create(self, validated_data):
-        answers = validated_data.pop('answers')
-        question_instance = Question.objects.create(**validated_data)
-        for answer in answers:
-            Answer.objects.create(quesion=question_instance,**answer)
-        return question_instance
+    # def create(self, validated_data):
+    #     answers = validated_data.pop('answers')
+    #     question_instance = Question.objects.create(**validated_data)
+    #     for answer in answers:
+    #         Answer.objects.create(quesion=question_instance,**answer)
+    #     return question_instance
 
 class SurveySerializer(serializers.ModelSerializer):
     questions = QuestionSerializer(many=True)
