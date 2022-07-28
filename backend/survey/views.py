@@ -1,17 +1,16 @@
 
-from unicodedata import name
 from survey.models import Survey, Question
 from django.http import Http404
 from survey.serializers import SurveySerializer, QuestionSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, generics
 
 
 # CLASS-BASED Views, Django REST Framework
 
 # GET all Survey's and POST new Survey and associated questions
-class list_surveys(APIView):
+class SurveyList(APIView):
 
     def get(self, request, format=None):
         surveys = Survey.objects.all()
@@ -26,7 +25,7 @@ class list_surveys(APIView):
         return Response(serializer.errors, status=400)
 
 # GET single survey, PUT a Survey, DELETE a survey
-class survey_details(APIView):
+class SurveyDetails(APIView):
 
     def get_object(self, id):
         try:
@@ -53,7 +52,7 @@ class survey_details(APIView):
         return Response({'message': f'Survey {survey.name} deleted'}, status=204)
 
 # GET questions from survey
-class list_survey_questions(APIView):
+class SurveyQuestions(APIView):
     
     def get(self, request, id, format=None):
         questions = Survey.objects.get(pk=id).questions.all()
