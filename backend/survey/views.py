@@ -10,7 +10,7 @@ from rest_framework import status
 
 # CLASS-BASED Views, Django REST Framework
 
-# GET all Survey's and POST new Survey
+# GET all Survey's and POST new Survey and associated questions
 class list_surveys(APIView):
 
     def get(self, request, format=None):
@@ -62,19 +62,5 @@ class list_survey_questions(APIView):
         return Response({f'Survey {survey_name}': {
             'questions': serializer.data}})
 
-class create_questions(APIView):
-    def post(self, request, id, format=None):
-        serializer = SurveySerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=201)
-        return Response(serializer.errors, status=400)
-        # survey = self.get_object(id)
-        # if survey:
-        #     question = Question.objects.create(survey=survey, question_text=request.data['question_text'])
-        #     serializer = QuestionSerializer(question, many=True)
-        #     serializer.save()
-        #     serializer.save()
-        #     return Response(serializer.data, status=201)
-        # return Response(serializer.errors, status=400)
+
 

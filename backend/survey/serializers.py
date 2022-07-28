@@ -7,7 +7,7 @@ class QuestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Question
         fields = ['id',
-                  'question_text']
+                  'question']
 
 class SurveySerializer(serializers.ModelSerializer):
     questions = QuestionSerializer(many=True)
@@ -32,8 +32,7 @@ class AnswerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Answer
         fields = ['id',
-                  'question',
-                  'answer_text']
+                  'answer']
 
 
 class UserAnswerSerializer(serializers.ModelSerializer):
