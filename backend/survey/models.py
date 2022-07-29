@@ -18,6 +18,6 @@ class Answer(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE, null=True, related_name='answers')
     answer = models.TextField(default='')
 
-class UserAnswer(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    answer = models.ForeignKey(Answer, on_delete=models.CASCADE)
+class Response(models.Model):
+    question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='responses')
+    answer = models.ForeignKey(Answer, on_delete=models.CASCADE, related_name='responses')
