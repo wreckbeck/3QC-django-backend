@@ -1,5 +1,6 @@
-from survey.models import Survey, Question, Answer
-from survey.serializers import SurveySerializer, QuestionSerializer, AnswerSerializer
+from urllib import response
+from survey.models import Survey, Question, Answer, ResponseObject
+from survey.serializers import SurveySerializer, QuestionSerializer, AnswerSerializer, ResponseSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import viewsets
@@ -64,3 +65,34 @@ class AnswerViewSet(viewsets.ModelViewSet):
 
         return Response({"message": f"Item {answer.id} has been deleted"})
 
+class ResponseViewSet(viewsets.ModelViewSet):
+    
+    queryset = ResponseObject.objects.all()
+    serializer_class = ResponseSerializer
+
+    # def list(self, request):
+    #     queryset = Response.objects.all()
+    #     serializer = ResponseSerializer(queryset, many=True)
+    #     return Response({"responses": serializer.data})
+
+    def create(self, request, *args, **kwargs):
+        response_data = request.data
+        new_response = ResponseObject.objects.create(survey=Survey.objects.get(id=response_data["survey"]))
+        new_response.save()
+
+        for question in response_data["questions"]:
+            question_obj = Question.objects.get(question=question["question"])
+            new_response.answers.add(question_obj)
+        
+        for answer in response_data["selected_answers"]:
+            answer_obj = Answer.objects.get(answer=answer["answer"])
+            new_response.answers.add(answer_obj)
+        
+        serializer = ResponseSerializer(new_response)
+        return Response(serializer.data)
+
+    def destroy(self, request, *args, **kwargs):
+        response_obj = self.get_object()
+        response_obj.delete()
+
+        return Response({"message": f"Item {response_obj} has been deleted"})

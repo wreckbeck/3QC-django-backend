@@ -1,3 +1,4 @@
+
 from django.db import models
 from django.contrib.auth import get_user_model
 
@@ -16,8 +17,7 @@ class Question(models.Model):
     question = models.TextField(default='')
     answers = models.ManyToManyField(Answer)
 
-
-
-# class Response(models.Model):
-#     question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='responses')
-#     answer = models.ForeignKey(Answer, on_delete=models.CASCADE, related_name='responses')
+class ResponseObject(models.Model):
+    survey = models.ForeignKey(Survey, on_delete=models.CASCADE, null=True, related_name='responses')
+    questions = models.ManyToManyField(Question)
+    selected_answers = models.ManyToManyField(Answer)
