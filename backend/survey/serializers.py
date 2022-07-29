@@ -9,9 +9,7 @@ class AnswerSerializer(serializers.ModelSerializer):
         model = Answer
         fields = [
                   'id',
-                  'answer',
-                  'question',]
-        depth = 1
+                  'answer']
 
 class QuestionSerializer(serializers.ModelSerializer):
     

@@ -1,11 +1,13 @@
-from posixpath import basename
-from django.urls import path, include
+
+from django.urls import path, include, re_path
 from survey.views import SurveyViewSet, QuestionViewSet, AnswerViewSet
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
-router.register("surveys", SurveyViewSet)
-router.register("questions", QuestionViewSet)
-router.register("answers", AnswerViewSet)
+router.register("questions", QuestionViewSet, basename="questions")
+router.register("answers", AnswerViewSet, basename="answers")
+router.register("", SurveyViewSet, basename='')
 
-urlpatterns = router.urls
+urlpatterns = [
+    re_path('', include(router.urls))
+]
