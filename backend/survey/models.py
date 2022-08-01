@@ -14,10 +14,4 @@ class Question(models.Model):
     question = models.TextField(default='')
 
 
-class Answer(models.Model):
-    question = models.ForeignKey(Question, on_delete=models.CASCADE, null=True, related_name='answers')
-    answer = models.IntegerField(default=0)
-
-# class Response(models.Model):
-#     question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='responses')
-#     answer = models.ForeignKey(Answer, on_delete=models.CASCADE, related_name='responses')
+# class UserResponse(models.Model):
