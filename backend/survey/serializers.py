@@ -1,17 +1,14 @@
 
 
+
 from rest_framework import serializers 
-from survey.models import Survey, Question
+from survey.models import Survey, Question, UserResponse
 
-# class AnswerSerializer(serializers.ModelSerializer):
-
-#     class Meta:
-#         model = Answer
-#         fields = [
-#                   'id',
-#                   'answer',
-#                   'question',]
-#         depth = 1
+class UserResponseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserResponse
+        fields = ['id',
+                    'response']
 
 class QuestionSerializer(serializers.ModelSerializer):
     
@@ -19,6 +16,7 @@ class QuestionSerializer(serializers.ModelSerializer):
         read_only=True,
         slug_field='id'
     )
+
     class Meta:
         model = Question
         fields = ['survey',
@@ -34,11 +32,3 @@ class SurveySerializer(serializers.ModelSerializer):
                   'created_on',
                   'updated_on',
                   'questions']
-
-# class ResponseSerializer(serializers.ModelSerializer):
- 
-#     class Meta:
-#         model = Response
-#         fields = ['id',
-#                   'user',
-#                   'asnwer']
