@@ -34,14 +34,6 @@ class QuestionViewSet(viewsets.ModelViewSet):
         serializer = QuestionSerializer(question)
         return Response(serializer.data)
 
-    # def get_queryset(self, *args, **kwargs):
-    #     survey_id = self.kwargs.get("survey_pk")
-    #     try:
-    #         survey = Survey.objects.get(id=survey_id)
-    #     except Survey.DoesNotExist:
-    #         raise NotFound('A survey with this id does not exist')
-    #     return self.queryset.filter(survey=survey)
-
     def create(self, request, *args, **kwargs):
         survey_id = self.kwargs.get("survey_pk")
         question_data = request.data
@@ -73,23 +65,11 @@ class UserResponseViewSet(viewsets.ModelViewSet):
         serializer = UserResponseSerializer(response)
         return Response(serializer.data)
     
-    def create(self, request, survey_pk=None, *args, **kwargs):
-        question_pk = self.kwargs.get("question_pk")
-        question = Question.objects.get(pk=question_pk, survey=survey_pk)
+    def create(self, request, survey_pk=None, question_pk=None):
         response_data = request.data
-        new_response = UserResponse.objects.create(question=question, response=response_data["response"])
-        new_response.save()
-        serializer = UserResponseSerializer(new_response)
+        response_obj = UserResponse.objects.create(response=response_data["response"])
+        question = Question.objects.get(pk=question_pk, survey=survey_pk)
+        response_obj.save()
+        question.responses.add(response_obj)
+        serializer = UserResponseSerializer(response_obj)
         return Response(serializer.data)
-
-    # queryset = UserResponse.objects.all().select_related(
-    #     'question'
-    #     )
-
-    # def get_queryset(self, *args, **kwargs):
-    #     question_id = self.kwargs.get("question_pk")
-    #     try:
-    #         question = Question.objects.get(id=question_id)
-    #     except Question.DoesNotExist:
-    #         raise NotFound('A question with this id does not exist')
-    #     return self.queryset.filter(question=question)

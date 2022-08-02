@@ -11,6 +11,7 @@ class Survey(models.Model):
 
 class UserResponse(models.Model):
     response = models.IntegerField(default=0)
+    # survey = models.ForeignKey(Survey, on_delete=models.CASCADE, related_name='responses')
 
 class Question(models.Model):
     survey = models.ForeignKey(Survey, on_delete=models.CASCADE, null=True, related_name='questions')
