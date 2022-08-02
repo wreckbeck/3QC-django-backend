@@ -1,44 +1,36 @@
 
-
 from rest_framework import serializers 
-from survey.models import Survey, Answer, Question, ResponseObject
+from survey.models import Survey, Question, UserResponse
 
-class AnswerSerializer(serializers.ModelSerializer):
+class UserResponseSerializer(serializers.ModelSerializer):
+    parent_lookup_kwargs = {
+    'question_pk': 'question__pk',
+    'survey_pk': 'question__survey__pk',
+    }
+
     class Meta:
-        model = Answer
-        fields = [
-            'id',
-            'answer'
-            ]
+        model = UserResponse
+        fields = ['id',
+                    'response']
 
 class QuestionSerializer(serializers.ModelSerializer):
+
+    parent_lookup_kwargs = {
+        'survey_pk': 'survey__pk'
+    }
+
     class Meta:
         model = Question
-        fields = [
-            'id',
-            'question',
-            'answers'
-            ]
-        depth = 1
+        fields = ['survey',
+                  'id',
+                  'question',
+                  'responses']
 
 class SurveySerializer(serializers.ModelSerializer):
     class Meta:
         model = Survey
-        fields = [
-            'id',
-            'name',
-            'created_on',
-            'updated_on',
-            'questions'
-            ]
-        depth = 1
-
-class ResponseSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ResponseObject
-        fields = [
-            'id',
-            'questions',
-            'selected_answers'
-            ]
-        depth = 1
+        fields = ['id',
+                  'name',
+                  'created_on',
+                  'updated_on',
+                  'questions']
