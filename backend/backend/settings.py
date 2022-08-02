@@ -85,13 +85,17 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ.get("HEROKU_DATABASE"),
-        'USER': os.environ.get("HEROKU_USER"),
-        'PASSWORD': os.environ.get("HEROKU_PASS"),
-        'HOST': os.environ.get("HEROKU_HOST"),
-        'PORT': os.environ.get("HEROK_PORT"),
+        'NAME': 'threeqc',
+        # 'USER': '',
+        # 'PASSWORD': '',
+        # 'HOST': 'localhost',
+        # 'PORT': '',
     }
 }
+if "DATABASE_URL" in os.environ:    
+    DATABASES['default'] = dj_database_url.config(conn_max_age=500)
+
+
 
 WHITENOISE_USE_FINDERS = True
 # Password validation
@@ -128,8 +132,6 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-db_from_env = dj_database_url.config(conn_max_age=500)
-DATABASES['default'].update(db_from_env)
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # STATIC_URL = 'static/'
 
