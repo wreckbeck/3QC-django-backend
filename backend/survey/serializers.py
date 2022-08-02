@@ -1,6 +1,7 @@
 
 
 
+from http.client import responses
 from rest_framework import serializers 
 from survey.models import Survey, Question, UserResponse
 
@@ -16,12 +17,18 @@ class QuestionSerializer(serializers.ModelSerializer):
         read_only=True,
         slug_field='id'
     )
+    responses = serializers.SlugRelatedField(
+        many=True,
+        read_only=True,
+        slug_field='id'
+    )
 
     class Meta:
         model = Question
         fields = ['survey',
                   'id',
-                  'question']
+                  'question',
+                  'responses']
 
 class SurveySerializer(serializers.ModelSerializer):
 

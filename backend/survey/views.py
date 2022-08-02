@@ -5,16 +5,6 @@ from rest_framework.response import Response
 from rest_framework import viewsets
 from rest_framework.exceptions import NotFound
 
-class SurveyViewSet(viewsets.ModelViewSet):
-
-    queryset = Survey.objects.all()
-    serializer_class = SurveySerializer
-
-    def destroy(self, request, *args, **kwargs):
-        survey = self.get_object()
-        survey.delete()
-
-        return Response({"message": f"Item {survey.name} has been deleted"})
 
 class QuestionViewSet(viewsets.ModelViewSet):
     
@@ -23,7 +13,10 @@ class QuestionViewSet(viewsets.ModelViewSet):
 
     queryset = Question.objects.all().select_related(
         'survey'
+        ).prefetch_related(
+            'responses'
         )
+    
     serializer_class = QuestionSerializer
 
     def get_queryset(self, *args, **kwargs):
@@ -53,3 +46,26 @@ class UserResponseViewSet(viewsets.ModelViewSet):
 
     queryset = UserResponse.objects.all()
     serializer_class = UserResponseSerializer
+
+    # queryset = UserResponse.objects.all().select_related(
+    #     'question'
+    #     )
+
+    def get_queryset(self, *args, **kwargs):
+        question_id = self.kwargs.get("question_pk")
+        try:
+            question = Question.objects.get(id=question_id)
+        except Question.DoesNotExist:
+            raise NotFound('A question with this id does not exist')
+        return self.queryset.filter(question=question)
+
+class SurveyViewSet(viewsets.ModelViewSet):
+
+    queryset = Survey.objects.all()
+    serializer_class = SurveySerializer
+
+    def destroy(self, request, *args, **kwargs):
+        survey = self.get_object()
+        survey.delete()
+
+        return Response({"message": f"Item {survey.name} has been deleted"})
