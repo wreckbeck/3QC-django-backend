@@ -6,8 +6,8 @@ from rest_framework_nested import routers
 
 
 
-router = SimpleRouter()
-router.register('surveys', SurveyViewSet)
+router = DefaultRouter()
+router.register(r'surveys', SurveyViewSet, basename='surveys')
 
 question_router = routers.NestedSimpleRouter(
     router,
@@ -17,23 +17,23 @@ question_router = routers.NestedSimpleRouter(
 question_router.register(
     r'questions',
     QuestionViewSet,
-    basename='survey-question'
+    basename='questions'
 )
 
 response_router = routers.NestedSimpleRouter(
     question_router,
     r'questions',
-    lookup='questions')
+    lookup='question')
 
 response_router.register(
     r'responses',
     UserResponseViewSet,
-    basename='survey-responses'
+    basename='responses'
 )
 
 
 urlpatterns = [
-    path('', include(router.urls)),
-    path('', include(question_router.urls)),
-    path('', include(response_router.urls))
+    path(r'', include(router.urls)),
+    path(r'', include(question_router.urls)),
+    path(r'', include(response_router.urls))
 ]
