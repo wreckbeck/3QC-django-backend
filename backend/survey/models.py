@@ -10,12 +10,13 @@ class Survey(models.Model):
     updated_on = models.DateTimeField(auto_now=True)
 
 class UserResponse(models.Model):
-    response = models.IntegerField(default=0)
+    survey = models.ForeignKey(Survey, on_delete=models.CASCADE, null=True, related_name='responses')
+    response = models.TextField(default='')
 
 
-class Question(models.Model):
-    survey = models.ForeignKey(Survey, on_delete=models.CASCADE, null=True, related_name='questions')
-    question = models.TextField(default='')
-    responses = models.ManyToManyField(UserResponse)
+# class Question(models.Model):
+#     survey = models.ForeignKey(Survey, on_delete=models.CASCADE, null=True, related_name='questions')
+#     question = models.TextField(default='')
+#     responses = models.ManyToManyField(UserResponse)
 
 
