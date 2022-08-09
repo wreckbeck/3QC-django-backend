@@ -1,8 +1,8 @@
 
 
 from urllib import response
-from survey.models import Survey, UserResponse
-from survey.serializers import SurveySerializer, UserResponseSerializer
+from survey.models import Survey, UserResponse, Question
+from survey.serializers import SurveySerializer, UserResponseSerializer, QuestionSerializer
 from rest_framework.response import Response
 from rest_framework import viewsets, permissions
 from django.shortcuts import get_object_or_404
@@ -43,7 +43,16 @@ class UserResponseViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         survey_id = self.kwargs.get("survey_pk")
         response_data = request.data
-        new_response = UserResponse.objects.create(survey=Survey.objects.get(id=survey_id), response=response_data["response"])
+
+        new_question = Question.objects.create(
+            question_1=response_data["user_responses"]["question_1"],
+            question_2=response_data["user_responses"]["question_2"],
+            question_3=response_data["user_responses"]["question_3"],
+            question_4=response_data["user_responses"]["question_4"]
+        )
+        new_question.save()
+
+        new_response = UserResponse.objects.create(survey=Survey.objects.get(id=survey_id), user_responses=new_question)
         new_response.save()
         serializer = UserResponseSerializer(new_response)
         return Response(serializer.data)
@@ -55,10 +64,10 @@ class UserResponseViewSet(viewsets.ModelViewSet):
 
         return Response({"message": message})
 
-# class UserResponseViewSet(viewsets.ModelViewSet):
+class QuestionViewSet(viewsets.ModelViewSet):
 
-#     queryset = UserResponse.objects.all()
-#     serializer_class = UserResponseSerializer
+    queryset = Question.objects.all()
+    serializer_class = QuestionSerializer
 
 #     def list(self, request, survey_pk=None, question_pk=None):
 #         queryset = UserResponse.objects.filter(question__survey=survey_pk, question=question_pk)

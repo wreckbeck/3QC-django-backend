@@ -1,6 +1,23 @@
 
 from rest_framework import serializers 
-from survey.models import Survey, UserResponse
+from survey.models import Survey, UserResponse, Question
+
+
+class QuestionSerializer(serializers.ModelSerializer):
+    parent_lookup_kwargs = {
+    'question_pk': 'question__pk',
+    'survey_pk': 'question__survey__pk',
+    }
+
+    class Meta:
+        model = Question
+        fields = ['id',
+                    'question_1',
+                    'question_2',
+                    'question_3',
+                    'question_4']
+
+
 
 class UserResponseSerializer(serializers.ModelSerializer):
     parent_lookup_kwargs = {
@@ -10,7 +27,8 @@ class UserResponseSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserResponse
         fields = ['id',
-                    'response']
+                    'user_responses']
+        depth=1
 
 class SurveySerializer(serializers.ModelSerializer):
     class Meta:
