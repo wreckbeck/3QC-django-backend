@@ -48,7 +48,8 @@ class UserResponseViewSet(viewsets.ModelViewSet):
             question_1=response_data["user_responses"]["question_1"],
             question_2=response_data["user_responses"]["question_2"],
             question_3=response_data["user_responses"]["question_3"],
-            question_4=response_data["user_responses"]["question_4"]
+            question_4=response_data["user_responses"]["question_4"],
+            # question_5=response_data["user_responses"]["question_5"]
         )
         new_question.save()
 
