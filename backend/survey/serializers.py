@@ -14,8 +14,6 @@ class QuestionSerializer(serializers.ModelSerializer):
                     'question_4',
                     'question_5']
 
-
-
 class UserResponseSerializer(serializers.ModelSerializer):
 
     class Meta:
